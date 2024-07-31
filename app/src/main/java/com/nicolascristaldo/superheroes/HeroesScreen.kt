@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,6 +39,28 @@ import com.nicolascristaldo.superheroes.model.Hero
 import com.nicolascristaldo.superheroes.model.HeroesRepository
 import com.nicolascristaldo.superheroes.ui.theme.SuperheroesTheme
 
+@Composable
+fun HeroList(
+    superheroes: List<Hero>,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = modifier
+    ) {
+        items(superheroes) { hero ->
+            HeroItem(
+                hero = hero,
+                modifier = modifier
+                    .padding(
+                        vertical = dimensionResource(id = R.dimen.padding_small),
+                        horizontal = dimensionResource(id = R.dimen.padding_medium)
+                    )
+            )
+        }
+    }
+}
 
 @Composable
 fun HeroItem(
@@ -47,6 +72,7 @@ fun HeroItem(
         modifier = modifier.fillMaxWidth()
     ) {
         Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .padding(dimensionResource(id = R.dimen.padding_medium))
                 .sizeIn(minHeight = 72.dp)
@@ -69,7 +95,6 @@ fun HeroInformation(
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
     ) {
         Text(
@@ -105,6 +130,6 @@ fun HeroImage(
 @Composable
 fun Preview() {
     SuperheroesTheme {
-        HeroItem(hero = HeroesRepository.heroes.last())
+        HeroList(superheroes = HeroesRepository.heroes)
     }
 }
